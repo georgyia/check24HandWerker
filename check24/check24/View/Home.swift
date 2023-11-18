@@ -34,48 +34,50 @@ struct Home: View {
         @State var showHandWerkerDetail = false
     
     var body: some View {
-        ZStack{
-            // Map view
-            Map(coordinateRegion: $viewModel.region)
-                            .ignoresSafeArea()
-                            .overlay(alignment: .topTrailing, content: {
-                                // Settings button
-                                Button {
-                                    showAnotherSheet.toggle()
-                                } label: {
-                                    Image(systemName: "gearshape.fill")
-                                        .font(.title2)
-                                }
-                                .padding()
-                            })
-            // MARK: Building Sheet UI
-            // Since We Always Need Bottom Sheet At Bottom Setting to True By Default
-                .bottomSheet(presentationDetents: [.medium,.large,.height(70)], isPresented: .constant(true), sheetCornerRadius: 20,isTransparentBG: true) {
-                    ScrollView(.vertical, showsIndicators: false) {
-                        VStack(spacing: 15){
-                            TextField("Search Handwerker", text: .constant(""))
-                                .padding(.vertical,10)
-                                .padding(.horizontal)
-                                .background {
-                                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                        .fill(.ultraThickMaterial)
-                                }
-                            
-                            // Handwerkers List View
-                            HandWerkersList()
+        NavigationView {
+            ZStack{
+                // Map view
+                Map(coordinateRegion: $viewModel.region)
+                    .ignoresSafeArea()
+                    .overlay(alignment: .topTrailing, content: {
+                        // Settings button
+                        Button {
+                            showAnotherSheet.toggle()
+                        } label: {
+                            Image(systemName: "gearshape.fill")
+                                .font(.title2)
                         }
                         .padding()
-                        .padding(.top)
-                    }
-                    .background(content: {
-                        Rectangle()
-                            .fill(.ultraThinMaterial)
-                            .ignoresSafeArea()
                     })
+                // MARK: Building Sheet UI
+                // Since We Always Need Bottom Sheet At Bottom Setting to True By Default
+                    .bottomSheet(presentationDetents: [.medium,.large,.height(70)], isPresented: .constant(true), sheetCornerRadius: 20,isTransparentBG: true) {
+                        ScrollView(.vertical, showsIndicators: false) {
+                            VStack(spacing: 15){
+                                TextField("Search Handwerker", text: .constant(""))
+                                    .padding(.vertical,10)
+                                    .padding(.horizontal)
+                                    .background {
+                                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                            .fill(.ultraThickMaterial)
+                                    }
+                                
+                                // Handwerkers List View
+                                HandWerkersList()
+                            }
+                            .padding()
+                            .padding(.top)
+                        }
+                        .background(content: {
+                            Rectangle()
+                                .fill(.ultraThinMaterial)
+                                .ignoresSafeArea()
+                        })
                         .sheet(isPresented: $showAnotherSheet) {
                             Text("Hi Setting 👋")
                         }
-                } onDismiss: {}
+                    } onDismiss: {}
+            }
         }
     }
     
